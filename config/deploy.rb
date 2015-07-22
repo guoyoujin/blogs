@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'blog'
-set :repo_url, 'git@github.com:guoyoujin/blog.git'
+set :repo_url, 'git@github.com:guoyoujin/blogs.git'
 
 set :scm, :git
 set :pty, true
