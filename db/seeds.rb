@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 #添加管理员
-admin = User.new username: 'admin', password: '123456', password_confirmation: '123456', email: '736698959@qq.com', admin: true, activation: 1
+admin = User.new username: 'guoyoujin', password: '123456', password_confirmation: '123456', email: '1132576362@qq.com', admin: true, activation: 1
 puts admin.save! ? 'add admin success.' : 'add admin fail!'
 
 #添加一个默认分类
