@@ -1,7 +1,7 @@
 #encoding: utf-8
 defaults: &defaults
   blog:
-    domain: http://blog.guoyoujin.com.cn
+    domain: http://localhost:3000
     aritcle_page_size: 10
     comments_page_size: 10
   mailer:
