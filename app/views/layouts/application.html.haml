@@ -40,7 +40,7 @@
               - else
                 %ul.navbar-button.navbar-right
                   %li
-                    = link_to '登录', login_path, class: 'btn btn-default'
+                    = link_to '登录', login_users_path, class: 'btn btn-default'
                   %li
                     = link_to '注册', register_path, class: 'btn btn-primary'
             = form_tag articles_path, method: 'get', class: 'navbar-form pull-right', role: 'search', id: 'search_form' do
