@@ -9,7 +9,7 @@ server '120.24.175.154', user:'gyj', roles: %w{web app db}
 
 set :deploy_to, "/project/blog"
 
-set :branch, 'develop'
+set :branch, 'master'
 set :rails_env, :production
 
 set :enable_ssl, false
