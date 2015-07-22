@@ -1,0 +1,61 @@
+ ### report
+    upstream report {
+      server unix:/project/report/shared/tmp/sockets/puma.sock;
+    }
+    server {
+        listen       80;
+        server_name  www.guoyoujin.com.cn;
+        client_max_body_size 20M;
+        access_log /project/logs/report_access.log;
+        error_log /project/logs/report_error.log;
+        root /project/report/current/public;
+        index index.html;
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+          
+          
+        }
+
+        location @report {
+          proxy_read_timeout 300;
+          proxy_connect_timeout 300;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_redirect off;
+          proxy_pass http://report;
+
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /project/roport/current/public;
+        }
+         # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }

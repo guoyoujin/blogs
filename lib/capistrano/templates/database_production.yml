@@ -1,0 +1,22 @@
+default: &default
+  adapter: mysql2
+  pool: 5
+  timeout: 5000
+  username: root
+  password: root
+  host: localhost
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *default
+  database: blog
+
+test:
+  <<: *default
+  host: 127.0.0.1
+  database: blog_test
+
+production:
+  <<: *default
+  host: 127.0.0.1
+  database: blog

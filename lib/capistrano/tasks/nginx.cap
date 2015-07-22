@@ -1,0 +1,50 @@
+namespace :nginx do
+  task :environment do
+    set :nginx_version, "1.9.1"
+    set :nginx_package, "nginx-#{fetch(:nginx_version)}.tar.gz"
+    set :nginx_url, "http://nginx.org/download/nginx-#{fetch(:nginx_version)}.tar.gz"
+    set :config_templates_path, "lib/capistrano/templates"
+  end
+
+  desc "Nginx config upload to server"
+  task :setup => :environment do
+    on roles(:all) do |host|
+      if "#{fetch(:stage)}" == "production"
+        upload! "#{fetch(:config_templates_path)}/nginx_production.conf", "/system/nginx/conf/nginx.conf"
+      else
+        upload! "#{fetch(:config_templates_path)}/nginx_staging.conf", "/system/nginx/conf/nginx.conf"
+      end
+    end
+  end
+
+  %w(stop start restart reload status).each do |action|
+    desc "#{action.capitalize} Nginx"
+    task action.to_sym do
+      on roles(:app), in: :sequence, wait: 1 do
+         execute "sudo /etc/init.d/nginx #{action}"
+      end
+    end
+  end
+
+  desc "Unicorn setup to server"
+  task :install => :environment do
+    on roles(:all) do |host|
+      within '/system' do
+        execute :wget, "#{fetch(:nginx_url)}"
+        execute :tar, :zxvf, "#{fetch(:nginx_package)}"
+
+        within "nginx-#{fetch(:nginx_version)}" do
+          execute :sh, 'configure --prefix=/system/nginx --user=www --group=www --pid-path=/system/nginx/pids/nginx.pid --error-log-path=/system/nginx/logs/error.log --http-log-path=/system/nginx/logs/access.log --with-http_stub_status_module --with-http_realip_module --with-http_gzip_static_module --without-http_fastcgi_module --without-http_memcached_module --without-http_map_module --without-http_geo_module --without-http_autoindex_module --with-poll_module --with-http_ssl_module'
+          execute :make
+          execute :make, 'install'
+        end
+      end
+
+      if "#{fetch(:stage)}" == "production"
+        upload! "#{fetch(:config_templates_path)}/nginx_production.conf", "/system/nginx/conf/nginx.conf"
+      end
+
+    end
+  end
+
+end
